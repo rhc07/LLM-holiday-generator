@@ -1,18 +1,12 @@
 package main
 
 import (
-	"io"
-	"log"
-	"net/http"
+	"github.com/gin-gonic/gin"
+	"github.com/rhc07/simple-go-service/routes"
 )
 
 func main() {
-
-	helloHandler := func(w http.ResponseWriter, req *http.Request) {
-		io.WriteString(w, "Hello, world!\n")
-	}
-
-	http.HandleFunc("/hello", helloHandler)
-	log.Println("Listing for requests at http://localhost:8000/hello")
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	r := gin.Default()
+	routes.GetVacationRouter(r)
+	r.Run()
 }
