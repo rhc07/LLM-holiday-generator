@@ -11,7 +11,7 @@ import (
 func generateVacationIdea(r GenerateVacationIdeaRequest) GenerateVacationIdeaResponse {
 	id := uuid.New()
 
-	go chains.GenerateVacationIdeaChange(id, r.Budget, r.FavoriteSeason, r.Hobbies)
+	go chains.GenerateVacationIdeaChange(id, r.Budget, r.Weather, r.Hobbies, r.TravellingMonth, r.FlyingFrom, r.FlyingTime)
 
 	return GenerateVacationIdeaResponse{ID: id, Completed: false}
 }

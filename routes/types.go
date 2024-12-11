@@ -3,9 +3,12 @@ package routes
 import "github.com/google/uuid"
 
 type GenerateVacationIdeaRequest struct {
-	FavoriteSeason string   `json:"favoriteSeason"`
-	Hobbies        []string `json:"hobbies"`
-	Budget         int      `json:"budget"`
+	Weather         string   `json:"weather"`
+	Hobbies         []string `json:"hobbies"`
+	Budget          int      `json:"budget"`
+	TravellingMonth string   `json:"travellingMonth"`
+	FlyingFrom      string   `json:"flyingFrom"`
+	FlyingTime      int      `json:"flyingTime"`
 }
 
 type GenerateVacationResponse struct {

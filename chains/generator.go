@@ -30,7 +30,7 @@ func GetVacationFromDb(id uuid.UUID) (Vacation, error) {
 	return *Vacations[idx], nil
 }
 
-func GenerateVacationIdeaChange(id uuid.UUID, budget int, season string, hobbies []string) {
+func GenerateVacationIdeaChange(id uuid.UUID, budget int, weather string, hobbies []string, travellingMonth string, flyingFrom string, flyingTime int) {
 	log.Printf("Generating new vacation idea with ID: %s", id)
 
 	// Soft create the mock database instance
@@ -48,11 +48,14 @@ func GenerateVacationIdeaChange(id uuid.UUID, budget int, season string, hobbies
 	// Create a system prompt with the season, hobbies, and budget parameters
 	// Helps tell the LLM how to act / respond to queries
 	systemPromptMessageString := "You are an AI travel agent that will help me create a vacation idea.\n" +
-		"My favorite season is {{.season}}.\n" +
+		"My favorite weather is {{.weather}}.\n" +
 		"My hobbies include {{.hobbies}}.\n" +
-		"My budget is {{.budget}} dollars.\n"
+		"I plan to travel during {{.travellingMonth}}.\n" +
+		"I plan to fly from {{.flyingFrom}}.\n" +
+		"I do not wish to fly for more than {{.flyingTime}} hours.\n" +
+		"My budget is {{.budget}} GBP.\n"
 
-	systemPromptMessage := prompts.NewSystemMessagePromptTemplate(systemPromptMessageString, []string{"season", "hobbies", "dollars"})
+	systemPromptMessage := prompts.NewSystemMessagePromptTemplate(systemPromptMessageString, []string{"weather", "hobbies", "budget", "travellingMonth", "flyingFrom", "flyingTime"})
 
 	// Create a human prompt with the request that a human would have
 	humanPromptMessageString := "Write up a travel itinerary"
@@ -65,9 +68,12 @@ func GenerateVacationIdeaChange(id uuid.UUID, budget int, season string, hobbies
 	chatPrompt := prompts.NewChatPromptTemplate([]prompts.MessageFormatter{systemPromptMessage, humanPromptMessage})
 
 	vals := map[string]any{
-		"season":  season,
-		"budget":  budget,
-		"hobbies": strings.Join(hobbies, ","),
+		"weather":         weather,
+		"budget":          budget,
+		"hobbies":         strings.Join(hobbies, ","),
+		"travellingMonth": travellingMonth,
+		"flyingFrom":      flyingFrom,
+		"flyingTime":      flyingTime,
 	}
 
 	msgs, err := chatPrompt.FormatMessages(vals)
